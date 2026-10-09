@@ -1,0 +1,18 @@
+{
+	"node": "n8n-nodes-pollinations",
+	"nodeVersion": "1.0",
+	"codexVersion": "1.0",
+	"categories": ["Utility", "Miscellaneous"],
+	"resources": {
+		"credentialDocumentation": [
+			{
+				"url": "https://enter.pollinations.ai/keys"
+			}
+		],
+		"primaryDocumentation": [
+			{
+				"url": "https://gen.pollinations.ai/docs"
+			}
+		]
+	}
+}
