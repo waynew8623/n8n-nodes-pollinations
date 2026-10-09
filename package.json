@@ -1,6 +1,6 @@
 {
 	"name": "@waynew8623/n8n-nodes-pollinations",
-	"version": "0.1.0",
+	"version": "0.2.0",
 	"description": "n8n community node for Pollinations — generate text, images, video, audio, 3D models and embeddings from a single OpenAI-compatible API",
 	"license": "MIT",
 	"homepage": "https://github.com/waynew8623/n8n-nodes-pollinations",

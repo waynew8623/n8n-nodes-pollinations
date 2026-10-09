@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { outputOption, safeOption } from '../shared/CommonOptions';
+import { modelLocator, outputOption, safeOption } from '../shared/CommonOptions';
 
 const show = { resource: ['video'] };
 
@@ -21,14 +21,14 @@ export const videoDescription: INodeProperties[] = [
 		default: 'generate',
 	},
 	{
-		displayName: 'Model',
-		name: 'model',
-		type: 'string',
-		default: 'veo',
-		required: true,
+		...modelLocator({
+			searchListMethod: 'getVideoModels',
+			defaultValue: 'google/veo-3.1-fast',
+			description:
+				'Video model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. google/veo-3.1-fast',
+		}),
 		displayOptions: { show: { ...show, operation: ['generate'] } },
-		description:
-			'Video model to use, for example "veo" or a full ID such as "google/veo-3.1-fast"',
 	},
 	{
 		displayName: 'Prompt',

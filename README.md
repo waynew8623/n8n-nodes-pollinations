@@ -27,6 +27,7 @@ n8n 是一个 [fair-code 许可](https://docs.n8n.io/sustainable-use-license/)�
 - [兼容性](#兼容性)
 - [开发与调试](#开发与调试)
 - [常见问题](#常见问题)
+- [版本历史](#版本历史)
 - [作者](#作者)
 - [许可证](#许可证)
 
@@ -35,6 +36,7 @@ n8n 是一个 [fair-code 许可](https://docs.n8n.io/sustainable-use-license/)�
 - **9 个资源、16 个操作**，覆盖 Pollinations 的全部生成能力
 - 图像 / 视频 / 音频 / 3D 结果直接以 **n8n 二进制数据**返回，可无缝接到「写文件」「上传云盘」「发送邮件」等下游节点；也可只取 URL
 - 文本生成默认只输出纯文本，关闭「Simplify」可拿到完整响应（含 usage、finish reason）
+- **Model 从平台实时拉取**：所有生成资源的模型都是**可搜索的在线选择器**，实时读取 Pollinations 模型目录（文本 196 / 图像 83 / 视频 20 / 语音合成 23 / 语音转写 7 / 3D 3 / 嵌入 6，随平台变化自动更新），无需手填模型 ID；也可切换到「Model ID」模式手动指定目录外的模型
 - 模型列表可按类型、来源、能力、可靠性过滤，并自动从 `Link` 响应头解析媒体地址
 - 账户资源可查余额、资料、用量与密钥权限
 - 标记为 `usableAsTool`，可被 **AI Agent** 节点当作工具调用
@@ -132,13 +134,15 @@ n8n 默认运行在 http://localhost:5678。
 
 | 场景 | 参数 |
 | --- | --- |
-| 文本生成 | Resource `Text`，Model `openai`，Prompt `用五言绝句写一下 n8n` |
-| 文生图 | Resource `Image`，Model `flux`，Prompt `太空里的猫，电影感`，Width/Height `1024` |
-| 文生视频 | Resource `Video`，Model `veo`，Prompt `日落延时`，Duration `4` |
-| 语音合成 | Resource `Audio` → `Speech`，Text `你好，世界`，Voice `nova` |
-| 语音转写 | Resource `Audio` → `Transcribe`，Input Type 选 `Binary File`，指向上一节点的音频字段 |
-| 文本嵌入 | Resource `Embedding`，Model `openai/text-embedding-3-small`，Input `你好，世界` |
+| 文本生成 | Resource `Text`，Model 选 `GPT-5.4 Nano`，Prompt `用五言绝句写一下 n8n` |
+| 文生图 | Resource `Image`，Model 选 `FLUX.1 Schnell`，Prompt `太空里的猫，电影感`，Width/Height `1024` |
+| 文生视频 | Resource `Video`，Model 选 `Veo 3.1 Fast`，Prompt `日落延时`，Duration `4` |
+| 语音合成 | Resource `Audio` → `Speech`，Model 选 `OpenAI TTS`，Text `你好，世界`，Voice `nova` |
+| 语音转写 | Resource `Audio` → `Transcribe`，Model 选 `Whisper Large V3`，Input Type 选 `Binary File`，指向上一节点的音频字段 |
+| 文本嵌入 | Resource `Embedding`，Model 选 `Text Embedding 3 Small`，Input `你好，世界` |
 | 查余额 | Resource `Account` → `Get Balance` |
+
+> Model 字段是从平台实时加载的**可搜索选择器**：点击后输入关键词（如 `claude`、`flux`）即可筛选，选项名称形如 `Claude Sonnet 5.5 (anthropic/claude-sonnet-5.5)`。如需使用目录中未列出的模型，把模式切到 **Model ID** 直接填 ID 即可。
 
 图像生成的输出可直接连到 **Write Binary File**、**S3**、**Google Drive** 等节点保存文件。
 
@@ -186,6 +190,11 @@ npm publish --access public
 
 把 **Output** 切为 *URL Only*，只拿链接；或把 media.pollinations.ai 返回的 URL 存库，避免二进制在流程里反复传递。
 
+### 版本历史
+
+- **0.2.0** — Model 字段改为从平台实时加载的**可搜索选择器**，覆盖文本、图像、视频、3D、语音合成、语音转写与嵌入共 7 处；仍兼容旧版本保存的字符串型模型值
+- **0.1.0** — 首次发布：9 个资源、16 个操作，覆盖文本、图像、视频、3D、音频、嵌入、模型列表、账户与媒体
+
 ### 作者
 
 **waynew8623**
@@ -212,6 +221,7 @@ npm publish --access public
 - [Compatibility](#compatibility)
 - [Development](#development)
 - [FAQ](#faq)
+- [Version history](#version-history)
 - [Author](#author)
 - [License](#license)
 
@@ -220,6 +230,7 @@ npm publish --access public
 - **9 resources, 16 operations** covering the full Pollinations generation surface
 - Images, video, audio and 3D models come back as **n8n binary data**, ready to feed into down-stream nodes such as *Write Binary File*, *S3* or *Google Drive*; a URL-only mode is also available
 - Text generation returns plain text by default; turn off **Simplify** to get the full response (usage, finish reason)
+- **Models are loaded live from the platform**: every generation resource uses a **searchable model picker** that reads the Pollinations catalog at runtime (196 text / 83 image / 20 video / 23 TTS / 7 STT / 3 3D / 6 embedding models, always up to date), so model IDs never have to be typed; switch to the **Model ID** mode to enter a model the catalog does not list
 - Model catalog can be filtered by type, source, capabilities and reliability, and media URLs are parsed from the `Link` response header
 - Account resource exposes balance, profile, usage and API key permissions
 - Marked `usableAsTool`, so **AI Agent** nodes can call it as a tool
@@ -317,13 +328,15 @@ Common combinations:
 
 | Scenario | Parameters |
 | --- | --- |
-| Text | Resource `Text`, Model `openai`, Prompt `Write a haiku about n8n` |
-| Text to image | Resource `Image`, Model `flux`, Prompt `A cat in space, cinematic`, Width/Height `1024` |
-| Text to video | Resource `Video`, Model `veo`, Prompt `Sunset timelapse`, Duration `4` |
-| Text to speech | Resource `Audio` → `Speech`, Text `Hello world`, Voice `nova` |
-| Speech to text | Resource `Audio` → `Transcribe`, Input Type `Binary File`, point at the audio field from a previous node |
-| Embeddings | Resource `Embedding`, Model `openai/text-embedding-3-small`, Input `Hello world` |
+| Text | Resource `Text`, Model `GPT-5.4 Nano`, Prompt `Write a haiku about n8n` |
+| Text to image | Resource `Image`, Model `FLUX.1 Schnell`, Prompt `A cat in space, cinematic`, Width/Height `1024` |
+| Text to video | Resource `Video`, Model `Veo 3.1 Fast`, Prompt `Sunset timelapse`, Duration `4` |
+| Text to speech | Resource `Audio` → `Speech`, Model `OpenAI TTS`, Text `Hello world`, Voice `nova` |
+| Speech to text | Resource `Audio` → `Transcribe`, Model `Whisper Large V3`, Input Type `Binary File`, point at the audio field from a previous node |
+| Embeddings | Resource `Embedding`, Model `Text Embedding 3 Small`, Input `Hello world` |
 | Balance | Resource `Account` → `Get Balance` |
+
+> The **Model** field is a **searchable picker** loaded live from the platform: start typing (for example `claude` or `flux`) to filter, and options are labelled `Claude Sonnet 5.5 (anthropic/claude-sonnet-5.5)`. Switch the mode to **Model ID** to use a model the catalog does not list.
 
 Generated images can be piped straight into *Write Binary File*, *S3*, *Google Drive* and similar nodes.
 
@@ -370,6 +383,11 @@ Check that the API key is correct and not expired, and that the account has poll
 **The output of image/video nodes is very large**
 
 Switch **Output** to *URL Only* and keep just the link, or persist the media.pollinations.ai URL instead of passing binary data through the whole workflow.
+
+### Version history
+
+- **0.2.0** — The Model field is now a **searchable picker** loaded live from the platform, across all seven generation resources (text, image, video, 3D, text-to-speech, speech-to-text and embeddings). Plain string model values saved by older versions keep working
+- **0.1.0** — Initial release: 9 resources and 16 operations covering text, image, video, 3D, audio, embeddings, model catalog, account and media
 
 ### Author
 

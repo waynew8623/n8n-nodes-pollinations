@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { safeOption } from '../shared/CommonOptions';
+import { modelLocator, safeOption } from '../shared/CommonOptions';
 
 const show = { resource: ['text'] };
 
@@ -21,14 +21,14 @@ export const textDescription: INodeProperties[] = [
 		default: 'generate',
 	},
 	{
-		displayName: 'Model',
-		name: 'model',
-		type: 'string',
-		default: 'openai',
-		required: true,
+		...modelLocator({
+			searchListMethod: 'getTextModels',
+			defaultValue: 'openai/gpt-5.4-nano',
+			description:
+				'Text model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. openai/gpt-5.4-nano',
+		}),
 		displayOptions: { show: { ...show, operation: ['generate'] } },
-		description:
-			'Model ID to use. Aliases such as "openai" work, and full IDs such as "openai/gpt-5.4-nano" or "anthropic/claude-sonnet-4.6" are also accepted.',
 	},
 	{
 		displayName: 'Prompt',

@@ -1,4 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { modelLocator } from '../shared/CommonOptions';
 
 const show = { resource: ['embedding'] };
 
@@ -20,14 +21,14 @@ export const embeddingDescription: INodeProperties[] = [
 		default: 'create',
 	},
 	{
-		displayName: 'Model',
-		name: 'model',
-		type: 'string',
-		default: 'openai/text-embedding-3-small',
-		required: true,
+		...modelLocator({
+			searchListMethod: 'getEmbeddingModels',
+			defaultValue: 'openai/text-embedding-3-small',
+			description:
+				'Embedding model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. openai/text-embedding-3-small',
+		}),
 		displayOptions: { show: { ...show, operation: ['create'] } },
-		description:
-			'Embedding model to use, for example "openai/text-embedding-3-small" or "google/gemini-embedding-2"',
 	},
 	{
 		displayName: 'Input',

@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { outputOption } from '../shared/CommonOptions';
+import { modelLocator, outputOption } from '../shared/CommonOptions';
 
 const show = { resource: ['threeD'] };
 
@@ -21,14 +21,14 @@ export const threeDDescription: INodeProperties[] = [
 		default: 'generate',
 	},
 	{
-		displayName: 'Model',
-		name: 'model',
-		type: 'string',
-		default: 'microsoft/trellis-2',
-		required: true,
+		...modelLocator({
+			searchListMethod: 'getThreeDModels',
+			defaultValue: 'microsoft/trellis-2',
+			description:
+				'3D model to use. The options are loaded live from the Pollinations model catalog. The Trellis 2 and Asset Harvester families only use the image.',
+			idPlaceholder: 'e.g. microsoft/trellis-2',
+		}),
 		displayOptions: { show: { ...show, operation: ['generate'] } },
-		description:
-			'3D model to use: "microsoft/trellis-2", "nvidia/asset-harvester" or "hyper3d/rodin-2.5". The Trellis 2 family ignores the text prompt and only uses the image.',
 	},
 	{
 		displayName: 'Prompt',

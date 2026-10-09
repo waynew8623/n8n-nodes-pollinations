@@ -95,6 +95,25 @@ export function extractList(response: unknown): IDataObject[] {
 }
 
 /**
+ * Read a model parameter that may be a resourceLocator (`{ mode, value }`), a
+ * plain string expression, or a legacy string value saved by an older version.
+ */
+export function resolveModelValue(
+	this: IExecuteFunctions,
+	parameterName: string,
+	itemIndex: number,
+): string {
+	const raw = this.getNodeParameter(parameterName, itemIndex, '');
+	if (typeof raw === 'string') return raw;
+	if (raw !== null && typeof raw === 'object' && !Array.isArray(raw)) {
+		const value = (raw as IDataObject).value;
+		if (typeof value === 'string') return value;
+		if (typeof value === 'number') return String(value);
+	}
+	return '';
+}
+
+/**
  * Perform a JSON request against the Pollinations API using the stored credential.
  */
 export async function pollinationsApiRequest(

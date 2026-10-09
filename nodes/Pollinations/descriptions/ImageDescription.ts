@@ -1,5 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
-import { outputOption, safeOption } from '../shared/CommonOptions';
+import { modelLocator, outputOption, safeOption } from '../shared/CommonOptions';
 
 const show = { resource: ['image'] };
 
@@ -21,14 +21,14 @@ export const imageDescription: INodeProperties[] = [
 		default: 'generate',
 	},
 	{
-		displayName: 'Model',
-		name: 'model',
-		type: 'string',
-		default: 'flux',
-		required: true,
+		...modelLocator({
+			searchListMethod: 'getImageModels',
+			defaultValue: 'black-forest-labs/flux.1-schnell',
+			description:
+				'Image model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. black-forest-labs/flux.1-schnell',
+		}),
 		displayOptions: { show: { ...show, operation: ['generate'] } },
-		description:
-			'Image model to use, for example "flux", "flux-realism", "turbo" or a full ID such as "black-forest-labs/flux.1-schnell"',
 	},
 	{
 		displayName: 'Prompt',

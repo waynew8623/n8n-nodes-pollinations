@@ -1,4 +1,5 @@
 import type { INodeProperties } from 'n8n-workflow';
+import { modelLocator } from '../shared/CommonOptions';
 
 const show = { resource: ['audio'] };
 
@@ -76,12 +77,15 @@ export const audioDescription: INodeProperties[] = [
 		description: 'Text to convert to speech',
 	},
 	{
-		displayName: 'Model',
-		name: 'audioModel',
-		type: 'string',
-		default: 'openai',
+		...modelLocator({
+			paramName: 'audioModel',
+			searchListMethod: 'getAudioModels',
+			defaultValue: 'openai/tts-1',
+			description:
+				'Text-to-speech model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. openai/tts-1',
+		}),
 		displayOptions: { show: { ...show, operation: ['speech'] } },
-		description: 'Audio model to use, for example "openai", "openai/tts-1" or "elevenlabs/eleven-v4"',
 	},
 	{
 		displayName: 'Voice',
@@ -154,12 +158,15 @@ export const audioDescription: INodeProperties[] = [
 		description: 'Public HTTPS URL of the audio file to transcribe',
 	},
 	{
-		displayName: 'Model',
-		name: 'transcribeModel',
-		type: 'string',
-		default: 'openai/whisper-large-v3',
+		...modelLocator({
+			paramName: 'transcribeModel',
+			searchListMethod: 'getTranscriptionModels',
+			defaultValue: 'openai/whisper-large-v3',
+			description:
+				'Transcription model to use. The options are loaded live from the Pollinations model catalog.',
+			idPlaceholder: 'e.g. openai/whisper-large-v3',
+		}),
 		displayOptions: { show: { ...show, operation: ['transcribe'] } },
-		description: 'Transcription model to use',
 	},
 	{
 		displayName: 'Options',

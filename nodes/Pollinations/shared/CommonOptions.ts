@@ -37,3 +37,47 @@ export const privateOption: INodeProperties = {
 	default: false,
 	description: 'Whether the request should be hidden from the public feed',
 };
+
+interface ModelLocatorConfig {
+	searchListMethod: string;
+	defaultValue: string;
+	description: string;
+	idPlaceholder?: string;
+	paramName?: string;
+}
+
+/**
+ * Reusable model picker. The list mode pulls the live catalog from the
+ * Pollinations API so models never have to be typed by hand; the ID mode stays
+ * available as an escape hatch for models the catalog does not expose.
+ */
+export function modelLocator(config: ModelLocatorConfig): INodeProperties {
+	const { searchListMethod, defaultValue, description, idPlaceholder, paramName } = config;
+	return {
+		displayName: 'Model',
+		name: paramName ?? 'model',
+		type: 'resourceLocator',
+		default: { mode: 'list', value: defaultValue },
+		required: true,
+		description,
+		modes: [
+			{
+				displayName: 'From List',
+				name: 'list',
+				type: 'list',
+				placeholder: 'Search a model...',
+				typeOptions: {
+					searchListMethod,
+					searchable: true,
+					searchFilterRequired: false,
+				},
+			},
+			{
+				displayName: 'Model ID',
+				name: 'id',
+				type: 'string',
+				placeholder: idPlaceholder ?? 'e.g. publisher/model-id',
+			},
+		],
+	};
+}

@@ -30,8 +30,18 @@ import {
 	pollinationsApiRequestBinary,
 	pollinationsApiRequestFormData,
 	pollinationsMediaRequest,
+	resolveModelValue,
 	type BinaryResponse,
 } from './shared/GenericFunctions';
+import {
+	getAudioModels,
+	getEmbeddingModels,
+	getImageModels,
+	getTextModels,
+	getThreeDModels,
+	getTranscriptionModels,
+	getVideoModels,
+} from './shared/ModelLoader';
 
 export class Pollinations implements INodeType {
 	description: INodeTypeDescription = {
@@ -84,6 +94,18 @@ export class Pollinations implements INodeType {
 			...threeDDescription,
 			...videoDescription,
 		],
+	};
+
+	methods = {
+		listSearch: {
+			getAudioModels,
+			getEmbeddingModels,
+			getImageModels,
+			getTextModels,
+			getThreeDModels,
+			getTranscriptionModels,
+			getVideoModels,
+		},
 	};
 
 	async execute(this: IExecuteFunctions): Promise<INodeExecutionData[][]> {
@@ -170,7 +192,7 @@ async function buildBinaryItem(
 // ---------------------------------------------------------------------------
 
 async function executeText(this: IExecuteFunctions, itemIndex: number): Promise<INodeExecutionData[]> {
-	const model = this.getNodeParameter('model', itemIndex) as string;
+	const model = resolveModelValue.call(this, 'model', itemIndex);
 	const prompt = this.getNodeParameter('prompt', itemIndex) as string;
 	const systemPrompt = this.getNodeParameter('systemPrompt', itemIndex, '') as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
@@ -218,7 +240,7 @@ async function executeText(this: IExecuteFunctions, itemIndex: number): Promise<
 // ---------------------------------------------------------------------------
 
 async function executeImage(this: IExecuteFunctions, itemIndex: number): Promise<INodeExecutionData[]> {
-	const model = this.getNodeParameter('model', itemIndex) as string;
+	const model = resolveModelValue.call(this, 'model', itemIndex);
 	const prompt = this.getNodeParameter('prompt', itemIndex) as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
 	const output = (options.output as string | undefined) ?? 'binary';
@@ -256,7 +278,7 @@ async function executeImage(this: IExecuteFunctions, itemIndex: number): Promise
 // ---------------------------------------------------------------------------
 
 async function executeVideo(this: IExecuteFunctions, itemIndex: number): Promise<INodeExecutionData[]> {
-	const model = this.getNodeParameter('model', itemIndex) as string;
+	const model = resolveModelValue.call(this, 'model', itemIndex);
 	const prompt = this.getNodeParameter('prompt', itemIndex) as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
 	const output = (options.output as string | undefined) ?? 'binary';
@@ -292,7 +314,7 @@ async function executeVideo(this: IExecuteFunctions, itemIndex: number): Promise
 // ---------------------------------------------------------------------------
 
 async function executeThreeD(this: IExecuteFunctions, itemIndex: number): Promise<INodeExecutionData[]> {
-	const model = this.getNodeParameter('model', itemIndex) as string;
+	const model = resolveModelValue.call(this, 'model', itemIndex);
 	const prompt = this.getNodeParameter('prompt', itemIndex, '') as string;
 	const image = this.getNodeParameter('image', itemIndex, '') as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
@@ -342,7 +364,7 @@ async function generateSpeech(
 	itemIndex: number,
 ): Promise<INodeExecutionData[]> {
 	const text = this.getNodeParameter('text', itemIndex) as string;
-	const model = this.getNodeParameter('audioModel', itemIndex, '') as string;
+	const model = resolveModelValue.call(this, 'audioModel', itemIndex);
 	const voice = this.getNodeParameter('voice', itemIndex) as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
 
@@ -370,7 +392,7 @@ async function transcribeAudio(
 	itemIndex: number,
 ): Promise<INodeExecutionData[]> {
 	const inputType = this.getNodeParameter('inputType', itemIndex, 'binary') as string;
-	const model = this.getNodeParameter('transcribeModel', itemIndex, '') as string;
+	const model = resolveModelValue.call(this, 'transcribeModel', itemIndex);
 	const options = this.getNodeParameter('transcribeOptions', itemIndex, {}) as IDataObject;
 
 	let buffer: Buffer;
@@ -419,7 +441,7 @@ async function executeEmbedding(
 	this: IExecuteFunctions,
 	itemIndex: number,
 ): Promise<INodeExecutionData[]> {
-	const model = this.getNodeParameter('model', itemIndex) as string;
+	const model = resolveModelValue.call(this, 'model', itemIndex);
 	const input = this.getNodeParameter('input', itemIndex) as string;
 	const options = this.getNodeParameter('options', itemIndex, {}) as IDataObject;
 
