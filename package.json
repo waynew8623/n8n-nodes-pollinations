@@ -1,26 +1,39 @@
 {
-	"name": "n8n-nodes-pollinations",
+	"name": "@waynew8623/n8n-nodes-pollinations",
 	"version": "0.1.0",
-	"description": "n8n community node for Pollinations — generate text, images, video, audio, 3D models and embeddings from a single API",
+	"description": "n8n community node for Pollinations — generate text, images, video, audio, 3D models and embeddings from a single OpenAI-compatible API",
 	"license": "MIT",
-	"homepage": "https://gen.pollinations.ai",
+	"homepage": "https://github.com/waynew8623/n8n-nodes-pollinations",
 	"keywords": [
 		"n8n-community-node-package",
+		"n8n",
+		"n8n-nodes",
 		"pollinations",
+		"pollinations-ai",
 		"ai",
+		"generative-ai",
 		"text-generation",
 		"image-generation",
 		"video-generation",
 		"text-to-speech",
-		"embeddings"
+		"speech-to-text",
+		"embeddings",
+		"3d-generation",
+		"flux",
+		"openai-compatible",
+		"workflow-automation"
 	],
 	"author": {
-		"name": "Pollinations n8n",
-		"email": "n8n-nodes-pollinations@users.noreply.github.com"
+		"name": "waynew8623",
+		"email": "waynew8623@gmail.com",
+		"url": "https://waynetalk.com"
 	},
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/your-org/n8n-nodes-pollinations.git"
+		"url": "git+https://github.com/waynew8623/n8n-nodes-pollinations.git"
+	},
+	"bugs": {
+		"url": "https://github.com/waynew8623/n8n-nodes-pollinations/issues"
 	},
 	"scripts": {
 		"build": "n8n-node build",
@@ -32,7 +45,8 @@
 		"prepublishOnly": "n8n-node prerelease"
 	},
 	"files": [
-		"dist"
+		"dist",
+		"!dist/**/*.tsbuildinfo"
 	],
 	"n8n": {
 		"n8nNodesApiVersion": 1,
@@ -43,6 +57,9 @@
 		"nodes": [
 			"dist/nodes/Pollinations/Pollinations.node.js"
 		]
+	},
+	"publishConfig": {
+		"access": "public"
 	},
 	"devDependencies": {
 		"@n8n/node-cli": "*",

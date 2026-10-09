@@ -1,8 +1,18 @@
 {
-	"node": "n8n-nodes-pollinations",
+	"node": "@waynew8623/n8n-nodes-pollinations",
 	"nodeVersion": "1.0",
 	"codexVersion": "1.0",
 	"categories": ["Utility", "Miscellaneous"],
+	"alias": [
+		"Pollinations",
+		"Pollinations AI",
+		"AI Generate",
+		"Text to Image",
+		"Text to Video",
+		"Text to Speech",
+		"Embeddings",
+		"Generative AI"
+	],
 	"resources": {
 		"credentialDocumentation": [
 			{
@@ -10,6 +20,9 @@
 			}
 		],
 		"primaryDocumentation": [
+			{
+				"url": "https://github.com/waynew8623/n8n-nodes-pollinations?tab=readme-ov-file"
+			},
 			{
 				"url": "https://gen.pollinations.ai/docs"
 			}
